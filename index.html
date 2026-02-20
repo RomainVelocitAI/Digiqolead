@@ -16,19 +16,19 @@
             --dq-primary-dark: #6B0F26;
             --dq-secondary: #199CB7;
             --dq-secondary-hover: #127387;
-            --dq-dark: #1a1118;
-            --dq-dark-light: #241820;
-            --dq-dark-lighter: #2e2028;
             --dq-accent: #DA6530;
             --dq-accent-hover: #E67A47;
-            --dq-text: #e0e0e0;
-            --dq-text-muted: #a09098;
-            --dq-border: #3a2a32;
+            --dq-bg: #F8F9FA;
+            --dq-white: #FFFFFF;
+            --dq-text: #212529;
+            --dq-text-muted: #6C757D;
+            --dq-border: #E0E0E0;
+            --dq-border-light: #EEEEEE;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--dq-dark);
+            background: var(--dq-bg);
             color: var(--dq-text);
             min-height: 100vh;
         }
@@ -40,17 +40,18 @@
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-thumb { background-color: var(--dq-accent); border-radius: 9999px; transition: background-color 0.2s; }
         ::-webkit-scrollbar-thumb:hover { background-color: var(--dq-secondary); }
-        ::-webkit-scrollbar-track { background-color: var(--dq-dark-light); }
+        ::-webkit-scrollbar-track { background-color: #f0f0f0; }
 
         ::selection { background-color: var(--dq-accent); color: #fff; }
 
         .header {
-            background: linear-gradient(135deg, var(--dq-dark-light), var(--dq-dark-lighter));
+            background: linear-gradient(135deg, var(--dq-primary), var(--dq-primary-dark));
             padding: 20px 30px;
-            border-bottom: 3px solid var(--dq-primary);
+            border-bottom: none;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(139, 20, 49, 0.2);
         }
 
         .header h1 {
@@ -60,7 +61,7 @@
             letter-spacing: -0.01em;
         }
 
-        .header h1 .brand-dq { color: var(--dq-primary); }
+        .header h1 .brand-dq { color: #ffb3c1; }
         .header h1 .brand-lead { color: var(--dq-secondary); }
         .header h1 .brand-gadget { color: var(--dq-accent); }
 
@@ -70,11 +71,11 @@
             gap: 8px;
         }
 
-        .api-key-section label { font-size: 0.85em; color: var(--dq-text-muted); }
+        .api-key-section label { font-size: 0.85em; color: rgba(255,255,255,0.7); }
 
         .api-key-section input {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid var(--dq-border);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
             color: #fff;
             padding: 6px 12px;
             border-radius: 6px;
@@ -83,10 +84,11 @@
             font-family: inherit;
         }
 
-        .api-key-section input:focus { border-color: var(--dq-primary); outline: none; }
+        .api-key-section input::placeholder { color: rgba(255,255,255,0.5); }
+        .api-key-section input:focus { border-color: #fff; outline: none; background: rgba(255,255,255,0.2); }
 
         .api-key-section button {
-            background: var(--dq-primary);
+            background: var(--dq-accent);
             color: #fff;
             border: none;
             padding: 6px 16px;
@@ -98,17 +100,18 @@
             transition: background 0.2s;
         }
 
-        .api-key-section button:hover { background: var(--dq-primary-hover); }
+        .api-key-section button:hover { background: var(--dq-accent-hover); }
 
         .main { max-width: 1400px; margin: 0 auto; padding: 20px 30px; }
 
         /* Search bar */
         .search-box {
-            background: var(--dq-dark-light);
+            background: var(--dq-white);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
             border: 1px solid var(--dq-border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
 
         .search-row {
@@ -122,16 +125,17 @@
         .field label { font-size: 0.8em; color: var(--dq-text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
 
         .field input, .field select {
-            background: rgba(255,255,255,0.06);
+            background: var(--dq-white);
             border: 1px solid var(--dq-border);
-            color: #fff;
+            color: var(--dq-text);
             padding: 10px 14px;
             border-radius: 8px;
             font-size: 0.95em;
             font-family: inherit;
         }
 
-        .field input:focus, .field select:focus { border-color: var(--dq-primary); outline: none; }
+        .field input::placeholder { color: #adb5bd; }
+        .field input:focus, .field select:focus { border-color: var(--dq-primary); outline: none; box-shadow: 0 0 0 3px rgba(139, 20, 49, 0.1); }
 
         .field.grow { flex: 1; min-width: 200px; }
 
@@ -150,11 +154,11 @@
         }
 
         .btn-primary { background: var(--dq-primary); color: #fff; }
-        .btn-primary:hover { background: var(--dq-primary-hover); transform: translateY(-1px); }
-        .btn-primary:disabled { background: #555; cursor: not-allowed; transform: none; }
+        .btn-primary:hover { background: var(--dq-primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(139, 20, 49, 0.25); }
+        .btn-primary:disabled { background: #ccc; color: #888; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .btn-secondary { background: var(--dq-dark-lighter); color: #fff; border: 1px solid var(--dq-border); }
-        .btn-secondary:hover { background: var(--dq-secondary); border-color: var(--dq-secondary); }
+        .btn-secondary { background: var(--dq-white); color: var(--dq-text); border: 1px solid var(--dq-border); }
+        .btn-secondary:hover { background: var(--dq-bg); border-color: var(--dq-primary); color: var(--dq-primary); }
 
         .btn-stop { background: #dc3545; color: #fff; }
         .btn-stop:hover { background: #b02a37; }
@@ -173,6 +177,7 @@
             gap: 6px;
             font-size: 0.9em;
             cursor: pointer;
+            color: var(--dq-text);
         }
 
         .checkbox-label input[type="checkbox"] {
@@ -187,16 +192,17 @@
             margin-left: auto;
         }
 
-        .status.active { color: var(--dq-accent); }
-        .status.done { color: var(--dq-secondary); }
-        .status.error { color: var(--dq-primary); }
+        .status.active { color: var(--dq-accent); font-weight: 500; }
+        .status.done { color: #28a745; font-weight: 500; }
+        .status.error { color: #dc3545; font-weight: 500; }
 
         /* Results table */
         .results-box {
-            background: var(--dq-dark-light);
+            background: var(--dq-white);
             border-radius: 12px;
             border: 1px solid var(--dq-border);
             overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
 
         .results-header {
@@ -207,7 +213,7 @@
             border-bottom: 1px solid var(--dq-border);
         }
 
-        .results-header h2 { font-size: 1em; font-weight: 600; }
+        .results-header h2 { font-size: 1em; font-weight: 600; color: var(--dq-text); }
 
         .results-count {
             background: var(--dq-primary);
@@ -229,7 +235,7 @@
         thead { position: sticky; top: 0; z-index: 1; }
 
         th {
-            background: var(--dq-dark-lighter);
+            background: var(--dq-primary);
             color: #fff;
             padding: 10px 12px;
             text-align: left;
@@ -242,17 +248,18 @@
 
         td {
             padding: 8px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid var(--dq-border-light);
             max-width: 250px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            color: var(--dq-text);
         }
 
-        tr:hover td { background: rgba(139, 20, 49, 0.12); }
+        tr:hover td { background: rgba(139, 20, 49, 0.05); }
 
         td a { color: var(--dq-secondary); text-decoration: none; }
-        td a:hover { text-decoration: underline; color: #28d4e8; }
+        td a:hover { text-decoration: underline; color: var(--dq-secondary-hover); }
 
         .rating { color: var(--dq-accent); font-weight: 600; }
 
@@ -269,7 +276,7 @@
         .setup-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -277,7 +284,7 @@
         }
 
         .setup-modal {
-            background: var(--dq-dark);
+            background: var(--dq-white);
             border: 1px solid var(--dq-border);
             border-radius: 16px;
             padding: 30px;
@@ -285,17 +292,19 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
         }
 
         .setup-modal h2 { color: var(--dq-primary); margin-bottom: 15px; }
         .setup-modal ol { padding-left: 20px; }
-        .setup-modal li { margin-bottom: 12px; line-height: 1.6; }
+        .setup-modal li { margin-bottom: 12px; line-height: 1.6; color: var(--dq-text); }
         .setup-modal a { color: var(--dq-secondary); }
         .setup-modal code {
-            background: rgba(255,255,255,0.1);
+            background: #f1f3f5;
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.9em;
+            color: var(--dq-primary);
         }
 
         .setup-modal .close-btn {
@@ -304,19 +313,22 @@
         }
 
         .help-link {
-            color: var(--dq-secondary);
+            color: rgba(255,255,255,0.8);
             font-size: 0.85em;
             cursor: pointer;
             text-decoration: underline;
         }
 
+        .help-link:hover { color: #fff; }
+
         /* Usage counter */
         .usage-panel {
-            background: var(--dq-dark-light);
+            background: var(--dq-white);
             border-radius: 12px;
             padding: 16px 20px;
             margin-bottom: 20px;
             border: 1px solid var(--dq-border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
             display: flex;
             gap: 16px;
             align-items: center;
@@ -326,7 +338,7 @@
         .usage-panel .usage-title {
             font-weight: 600;
             font-size: 0.9em;
-            color: #fff;
+            color: var(--dq-text);
             white-space: nowrap;
         }
 
@@ -353,7 +365,7 @@
         }
 
         .usage-meter .meter-bar {
-            background: rgba(255,255,255,0.06);
+            background: #e9ecef;
             border-radius: 6px;
             height: 8px;
             overflow: hidden;
@@ -365,7 +377,7 @@
             transition: width 0.4s ease, background 0.4s ease;
         }
 
-        .meter-fill.green { background: var(--dq-secondary); }
+        .meter-fill.green { background: #28a745; }
         .meter-fill.yellow { background: var(--dq-accent); }
         .meter-fill.orange { background: var(--dq-accent-hover); }
         .meter-fill.red { background: var(--dq-primary); }
@@ -378,7 +390,7 @@
         .usage-cost .cost-value {
             font-size: 1.3em;
             font-weight: 700;
-            color: var(--dq-secondary);
+            color: var(--dq-accent);
         }
 
         .usage-cost .cost-label {
@@ -394,7 +406,7 @@
         }
 
         .usage-actions button {
-            background: rgba(255,255,255,0.06);
+            background: var(--dq-bg);
             border: 1px solid var(--dq-border);
             color: var(--dq-text-muted);
             padding: 4px 10px;
@@ -406,7 +418,7 @@
             transition: all 0.2s;
         }
 
-        .usage-actions button:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .usage-actions button:hover { background: var(--dq-border); color: var(--dq-text); }
 
         .usage-month {
             font-size: 0.75em;
@@ -430,7 +442,7 @@
             display: inline-block;
             width: 14px;
             height: 14px;
-            border: 2px solid rgba(255,255,255,0.15);
+            border: 2px solid #e9ecef;
             border-top-color: var(--dq-secondary);
             border-radius: 50%;
             animation: email-spin 0.7s linear infinite;
@@ -439,13 +451,14 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Email trouvé : flash cyan */
+        /* Email trouvé : flash */
         .email-found {
             animation: email-flash 0.6s ease;
             color: var(--dq-secondary);
+            font-weight: 500;
         }
         @keyframes email-flash {
-            0% { background-color: rgba(25, 156, 183, 0.25); }
+            0% { background-color: rgba(25, 156, 183, 0.15); }
             100% { background-color: transparent; }
         }
 
