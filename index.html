@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digiqolead-o-gadget</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --dq-primary: #e74266;
+            --dq-primary-hover: #cf3c5c;
+            --dq-secondary: #20b69e;
+            --dq-secondary-hover: #1ca08a;
+            --dq-dark: #101330;
+            --dq-dark-light: #1a1d42;
+            --dq-dark-lighter: #232754;
+            --dq-accent: #DA6530;
+            --dq-text: #e0e0e0;
+            --dq-text-muted: #9a9ab0;
+            --dq-border: #2a2d55;
+        }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dq-dark);
+            color: var(--dq-text);
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-thumb { background-color: var(--dq-accent); border-radius: 9999px; }
+        ::-webkit-scrollbar-track { background-color: var(--dq-dark-light); }
+
+        ::selection { background-color: var(--dq-accent); color: #fff; }
+
+        .header {
+            background: linear-gradient(135deg, var(--dq-dark-light), var(--dq-dark-lighter));
+            padding: 20px 30px;
+            border-bottom: 3px solid var(--dq-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .header h1 .brand-dq { color: var(--dq-primary); }
+        .header h1 .brand-lead { color: var(--dq-secondary); }
+        .header h1 .brand-gadget { color: var(--dq-accent); }
+
+        .api-key-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .api-key-section label { font-size: 0.85em; color: var(--dq-text-muted); }
+
+        .api-key-section input {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--dq-border);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            width: 280px;
+            font-size: 0.85em;
+            font-family: inherit;
+        }
+
+        .api-key-section input:focus { border-color: var(--dq-primary); outline: none; }
+
+        .api-key-section button {
+            background: var(--dq-primary);
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-family: inherit;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .api-key-section button:hover { background: var(--dq-primary-hover); }
+
+        .main { max-width: 1400px; margin: 0 auto; padding: 20px 30px; }
+
+        /* Search bar */
+        .search-box {
+            background: var(--dq-dark-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--dq-border);
+        }
+
+        .search-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .field { display: flex; flex-direction: column; gap: 4px; }
+        .field label { font-size: 0.8em; color: var(--dq-text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+
+        .field input, .field select {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--dq-border);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+        }
+
+        .field input:focus, .field select:focus { border-color: var(--dq-primary); outline: none; }
+
+        .field.grow { flex: 1; min-width: 200px; }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary { background: var(--dq-primary); color: #fff; }
+        .btn-primary:hover { background: var(--dq-primary-hover); transform: translateY(-1px); }
+        .btn-primary:disabled { background: #555; cursor: not-allowed; transform: none; }
+
+        .btn-secondary { background: var(--dq-dark-lighter); color: #fff; border: 1px solid var(--dq-border); }
+        .btn-secondary:hover { background: var(--dq-secondary); border-color: var(--dq-secondary); }
+
+        .btn-stop { background: #dc3545; color: #fff; }
+        .btn-stop:hover { background: #b02a37; }
+
+        .options-row {
+            display: flex;
+            gap: 20px;
+            margin-top: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            accent-color: var(--dq-primary);
+            width: 16px;
+            height: 16px;
+        }
+
+        .status {
+            font-size: 0.9em;
+            color: var(--dq-text-muted);
+            margin-left: auto;
+        }
+
+        .status.active { color: var(--dq-accent); }
+        .status.done { color: var(--dq-secondary); }
+        .status.error { color: var(--dq-primary); }
+
+        /* Results table */
+        .results-box {
+            background: var(--dq-dark-light);
+            border-radius: 12px;
+            border: 1px solid var(--dq-border);
+            overflow: hidden;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--dq-border);
+        }
+
+        .results-header h2 { font-size: 1em; font-weight: 600; }
+
+        .results-count {
+            background: var(--dq-primary);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .table-wrap { overflow-x: auto; max-height: 60vh; overflow-y: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88em;
+        }
+
+        thead { position: sticky; top: 0; z-index: 1; }
+
+        th {
+            background: var(--dq-dark-lighter);
+            color: #fff;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        tr:hover td { background: rgba(231, 66, 102, 0.08); }
+
+        td a { color: var(--dq-secondary); text-decoration: none; }
+        td a:hover { text-decoration: underline; color: #28d4b8; }
+
+        .rating { color: var(--dq-accent); font-weight: 600; }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #555;
+        }
+
+        .empty-state .icon { font-size: 3em; margin-bottom: 10px; }
+
+        /* Setup guide */
+        .setup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .setup-modal {
+            background: var(--dq-dark);
+            border: 1px solid var(--dq-border);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .setup-modal h2 { color: var(--dq-primary); margin-bottom: 15px; }
+        .setup-modal ol { padding-left: 20px; }
+        .setup-modal li { margin-bottom: 12px; line-height: 1.6; }
+        .setup-modal a { color: var(--dq-secondary); }
+        .setup-modal code {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .setup-modal .close-btn {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .help-link {
+            color: var(--dq-secondary);
+            font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Usage counter */
+        .usage-panel {
+            background: var(--dq-dark-light);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--dq-border);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .usage-panel .usage-title {
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .usage-meters {
+            display: flex;
+            gap: 16px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .usage-meter {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .usage-meter .meter-label {
+            font-size: 0.75em;
+            color: var(--dq-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .usage-meter .meter-bar {
+            background: rgba(255,255,255,0.06);
+            border-radius: 6px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .usage-meter .meter-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.4s ease, background 0.4s ease;
+        }
+
+        .meter-fill.green { background: var(--dq-secondary); }
+        .meter-fill.yellow { background: var(--dq-accent); }
+        .meter-fill.orange { background: #e85d26; }
+        .meter-fill.red { background: var(--dq-primary); }
+
+        .usage-cost {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .usage-cost .cost-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--dq-secondary);
+        }
+
+        .usage-cost .cost-label {
+            font-size: 0.7em;
+            color: var(--dq-text-muted);
+            text-transform: uppercase;
+        }
+
+        .usage-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .usage-actions button {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--dq-border);
+            color: var(--dq-text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .usage-actions button:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+        .usage-month {
+            font-size: 0.75em;
+            color: #555;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.75em;
+            color: var(--dq-text-muted);
+        }
+
+        .footer a { color: var(--dq-primary); text-decoration: none; font-weight: 600; }
+        .footer a:hover { text-decoration: underline; }
+
+        /* Email spinner */
+        .email-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #4fc3f7;
+            border-radius: 50%;
+            animation: email-spin 0.7s linear infinite;
+        }
+        @keyframes email-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Email trouvé : flash vert */
+        .email-found {
+            animation: email-flash 0.6s ease;
+            color: #81c784;
+        }
+        @keyframes email-flash {
+            0% { background-color: rgba(129, 199, 132, 0.3); }
+            100% { background-color: transparent; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 10px; }
+            .api-key-section { width: 100%; }
+            .api-key-section input { flex: 1; }
+            .search-row { flex-direction: column; }
+            .usage-panel { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1><span class="brand-dq">Digiqo</span><span class="brand-lead">lead</span>-o-<span class="brand-gadget">gadget</span></h1>
+    <div class="api-key-section">
+        <label>Clé API :</label>
+        <input type="password" id="apiKeyInput" placeholder="Entrez votre clé API Google...">
+        <button onclick="saveApiKey()">Sauver</button>
+        <span class="help-link" onclick="showSetup()">Guide setup</span>
+    </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+    <!-- Search -->
+    <div class="search-box">
+        <div class="search-row">
+            <div class="field grow">
+                <label>Requête</label>
+                <input type="text" id="queryInput" placeholder="plombier, restaurant, coiffeur...">
+            </div>
+            <div class="field grow">
+                <label>Ville / Zone</label>
+                <input type="text" id="cityInput" placeholder="Paris, Lyon 3e, Marseille...">
+            </div>
+            <div class="field">
+                <label>Max résultats</label>
+                <input type="number" id="limitInput" value="60" min="1" max="200" style="width:80px">
+            </div>
+            <button class="btn btn-primary" id="searchBtn" onclick="startSearch()">🔍 Rechercher</button>
+            <button class="btn btn-stop" id="stopBtn" onclick="stopSearch()" style="display:none">⛔ Stop</button>
+            <button class="btn btn-secondary" onclick="exportCSV()">📁 CSV</button>
+        </div>
+        <div class="options-row">
+            <label class="checkbox-label">
+                <input type="checkbox" id="emailCheck">
+                Récupérer les emails (plus lent)
+            </label>
+            <span class="status" id="statusText">Prêt</span>
+        </div>
+    </div>
+
+    <!-- Usage Counter -->
+    <div class="usage-panel" id="usagePanel">
+        <div class="usage-title">📊 Conso API</div>
+        <div class="usage-meters">
+            <div class="usage-meter">
+                <div class="meter-label">
+                    <span>Text Search (Places)</span>
+                    <span id="textSearchCount">0 / 5 000</span>
+                </div>
+                <div class="meter-bar"><div class="meter-fill green" id="textSearchBar" style="width:0%"></div></div>
+            </div>
+            <div class="usage-meter">
+                <div class="meter-label">
+                    <span>Geocoding</span>
+                    <span id="geocodingCount">0 / 10 000</span>
+                </div>
+                <div class="meter-bar"><div class="meter-fill green" id="geocodingBar" style="width:0%"></div></div>
+            </div>
+        </div>
+        <div class="usage-cost">
+            <div class="cost-value" id="costValue">0,00 €</div>
+            <div class="cost-label">Coût estimé</div>
+        </div>
+        <div class="usage-actions">
+            <button onclick="resetUsage()">🔄 Réinitialiser</button>
+            <div class="usage-month" id="usageMonth"></div>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-box">
+        <div class="results-header">
+            <h2>Résultats</h2>
+            <span class="results-count" id="countBadge">0</span>
+        </div>
+        <div class="table-wrap">
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nom</th>
+                        <th>Adresse</th>
+                        <th>Téléphone</th>
+                        <th>Site Web</th>
+                        <th>Email</th>
+                        <th>Note</th>
+                        <th>Avis</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                </tbody>
+            </table>
+            <div class="empty-state" id="emptyState">
+                <div class="icon">🗺️</div>
+                <p>Entrez une requête et une ville pour commencer</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    Propulsé par <a href="https://digiqo.fr" target="_blank">Digiqo</a> — Agence Marketing Digital à La Réunion
+</div>
+
+<!-- Setup Guide Modal -->
+<div class="setup-overlay" id="setupOverlay" style="display:none">
+    <div class="setup-modal">
+        <h2>🔑 Comment obtenir ta clé API Google (gratuit)</h2>
+        <ol>
+            <li>Va sur <a href="https://console.cloud.google.com/" target="_blank">console.cloud.google.com</a> et connecte-toi avec ton compte Google</li>
+            <li>Crée un <strong>nouveau projet</strong> (ex: "Scraper Maps")</li>
+            <li>Va dans <strong>APIs & Services → Bibliothèque</strong></li>
+            <li>Active ces 2 APIs :
+                <br>• <code>Places API (New)</code>
+                <br>• <code>Geocoding API</code>
+            </li>
+            <li>Va dans <strong>APIs & Services → Identifiants</strong></li>
+            <li>Clique <strong>+ Créer des identifiants → Clé API</strong></li>
+            <li>Copie la clé et colle-la dans le champ en haut de cette page</li>
+            <li><strong>(Recommandé)</strong> Configure un budget à 0$ :
+                <br>• Va dans <strong>Facturation → Budgets et alertes</strong>
+                <br>• Crée un budget à <code>1€</code> avec alerte email
+            </li>
+        </ol>
+        <p style="margin-top:15px; color:var(--dq-text-muted); font-size:0.9em;">
+            💡 Google offre des <strong>quotas gratuits par API</strong> : 5 000 requêtes Text Search/mois et 10 000 Geocoding/mois. À ton volume, tu resteras dans le gratuit.
+        </p>
+        <button class="btn btn-primary close-btn" onclick="hideSetup()">J'ai compris !</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  STATE
+// ============================================================
+let results = [];
+let searching = false;
+let stopRequested = false;
+let apiKey = localStorage.getItem('gmaps_api_key') || '';
+
+// ============================================================
+//  USAGE TRACKING
+// ============================================================
+const USAGE_KEY = 'gmaps_usage';
+const FREE_LIMITS = { textSearch: 5000, geocoding: 10000 };
+// Prix au-delà du gratuit (par requête)
+const PRICES = { textSearch: 0.032, geocoding: 0.005 }; // USD
+
+function getUsage() {
+    const raw = localStorage.getItem(USAGE_KEY);
+    if (raw) {
+        const data = JSON.parse(raw);
+        const now = new Date();
+        const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+        if (data.month !== monthKey) {
+            return { month: monthKey, textSearch: 0, geocoding: 0 };
+        }
+        return data;
+    }
+    const now = new Date();
+    return { month: `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`, textSearch: 0, geocoding: 0 };
+}
+
+function saveUsage(usage) {
+    localStorage.setItem(USAGE_KEY, JSON.stringify(usage));
+    renderUsage(usage);
+}
+
+function trackApiCall(type, count = 1) {
+    const usage = getUsage();
+    usage[type] = (usage[type] || 0) + count;
+    saveUsage(usage);
+}
+
+function resetUsage() {
+    if (!confirm('Remettre les compteurs à zéro ?')) return;
+    const now = new Date();
+    const usage = { month: `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`, textSearch: 0, geocoding: 0 };
+    saveUsage(usage);
+}
+
+function renderUsage(usage) {
+    if (!usage) usage = getUsage();
+
+    const tsPct = Math.min(100, (usage.textSearch / FREE_LIMITS.textSearch) * 100);
+    document.getElementById('textSearchCount').textContent = `${usage.textSearch.toLocaleString('fr')} / ${FREE_LIMITS.textSearch.toLocaleString('fr')}`;
+    const tsBar = document.getElementById('textSearchBar');
+    tsBar.style.width = tsPct + '%';
+    tsBar.className = 'meter-fill ' + getMeterColor(tsPct);
+
+    const gcPct = Math.min(100, (usage.geocoding / FREE_LIMITS.geocoding) * 100);
+    document.getElementById('geocodingCount').textContent = `${usage.geocoding.toLocaleString('fr')} / ${FREE_LIMITS.geocoding.toLocaleString('fr')}`;
+    const gcBar = document.getElementById('geocodingBar');
+    gcBar.style.width = gcPct + '%';
+    gcBar.className = 'meter-fill ' + getMeterColor(gcPct);
+
+    let cost = 0;
+    if (usage.textSearch > FREE_LIMITS.textSearch)
+        cost += (usage.textSearch - FREE_LIMITS.textSearch) * PRICES.textSearch;
+    if (usage.geocoding > FREE_LIMITS.geocoding)
+        cost += (usage.geocoding - FREE_LIMITS.geocoding) * PRICES.geocoding;
+
+    const costEl = document.getElementById('costValue');
+    costEl.textContent = cost.toFixed(2).replace('.', ',') + ' €';
+    costEl.style.color = cost === 0 ? 'var(--dq-secondary)' : cost < 5 ? 'var(--dq-accent)' : 'var(--dq-primary)';
+
+    const [y, m] = usage.month.split('-');
+    const moisNoms = ['Janv','Fév','Mars','Avr','Mai','Juin','Juil','Août','Sept','Oct','Nov','Déc'];
+    document.getElementById('usageMonth').textContent = `${moisNoms[parseInt(m)-1]} ${y}`;
+}
+
+function getMeterColor(pct) {
+    if (pct < 50) return 'green';
+    if (pct < 75) return 'yellow';
+    if (pct < 90) return 'orange';
+    return 'red';
+}
+
+// Init
+document.getElementById('apiKeyInput').value = apiKey;
+if (!apiKey) setTimeout(showSetup, 500);
+renderUsage();
+
+// ============================================================
+//  API KEY
+// ============================================================
+function saveApiKey() {
+    apiKey = document.getElementById('apiKeyInput').value.trim();
+    if (apiKey) {
+        localStorage.setItem('gmaps_api_key', apiKey);
+        setStatus('✅ Clé API sauvegardée', 'done');
+    }
+}
+
+function showSetup() { document.getElementById('setupOverlay').style.display = 'flex'; }
+function hideSetup() { document.getElementById('setupOverlay').style.display = 'none'; }
+
+// ============================================================
+//  STATUS
+// ============================================================
+function setStatus(text, type = '') {
+    const el = document.getElementById('statusText');
+    el.textContent = text;
+    el.className = 'status ' + type;
+}
+
+// ============================================================
+//  GEOCODING
+// ============================================================
+async function geocodeCity(city) {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)}&key=${apiKey}&language=fr`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    trackApiCall('geocoding');
+
+    if (data.status === 'OK' && data.results.length > 0) {
+        const loc = data.results[0].geometry.location;
+        return { lat: loc.lat, lng: loc.lng };
+    }
+    throw new Error(`Impossible de géolocaliser "${city}" (${data.status})`);
+}
+
+// ============================================================
+//  PLACES SEARCH (New API)
+// ============================================================
+async function searchPlaces(query, location, limit) {
+    const allResults = [];
+    let nextPageToken = null;
+
+    while (allResults.length < limit) {
+        if (stopRequested) break;
+
+        const body = {
+            textQuery: query,
+            locationBias: {
+                circle: {
+                    center: { latitude: location.lat, longitude: location.lng },
+                    radius: 10000.0
+                }
+            },
+            languageCode: "fr",
+            maxResultCount: Math.min(20, limit - allResults.length),
+        };
+
+        if (nextPageToken) {
+            body.pageToken = nextPageToken;
+        }
+
+        const resp = await fetch('https://places.googleapis.com/v1/places:searchText', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Goog-Api-Key': apiKey,
+                'X-Goog-FieldMask': [
+                    'places.displayName',
+                    'places.formattedAddress',
+                    'places.nationalPhoneNumber',
+                    'places.internationalPhoneNumber',
+                    'places.websiteUri',
+                    'places.rating',
+                    'places.userRatingCount',
+                    'places.googleMapsUri',
+                    'places.id',
+                    'nextPageToken'
+                ].join(',')
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            const msg = err.error?.message || resp.statusText;
+            throw new Error(`API Error ${resp.status}: ${msg}`);
+        }
+
+        const data = await resp.json();
+        trackApiCall('textSearch');
+        const places = data.places || [];
+
+        for (const place of places) {
+            if (allResults.length >= limit) break;
+            if (stopRequested) break;
+
+            allResults.push({
+                name: place.displayName?.text || '',
+                address: place.formattedAddress || '',
+                phone: place.nationalPhoneNumber || place.internationalPhoneNumber || '',
+                website: place.websiteUri || '',
+                email: '',
+                rating: place.rating ? place.rating.toFixed(1) : '',
+                reviews: place.userRatingCount ? place.userRatingCount.toString() : '',
+                link: place.googleMapsUri || '',
+                placeId: place.id || '',
+            });
+        }
+
+        nextPageToken = data.nextPageToken;
+        if (!nextPageToken || places.length === 0) break;
+
+        // Google demande un petit délai entre les pages
+        await sleep(2000);
+    }
+
+    return allResults;
+}
+
+// ============================================================
+//  EMAIL SCRAPING (via Netlify Function — côté serveur)
+// ============================================================
+async function fetchEmail(website) {
+    if (!website) return '';
+    if (stopRequested) return '';
+
+    try {
+        const resp = await fetch(`/.netlify/functions/fetch-email?url=${encodeURIComponent(website)}`, {
+            signal: AbortSignal.timeout(12000)
+        });
+        if (!resp.ok) return '';
+        const data = await resp.json();
+        return data.email || '';
+    } catch {
+        return '';
+    }
+}
+
+// ============================================================
+//  SEARCH ORCHESTRATOR
+// ============================================================
+async function startSearch() {
+    if (searching) return;
+
+    if (!apiKey) {
+        showSetup();
+        return;
+    }
+
+    const query = document.getElementById('queryInput').value.trim();
+    const city = document.getElementById('cityInput').value.trim();
+    const limit = parseInt(document.getElementById('limitInput').value) || 60;
+    const wantEmail = document.getElementById('emailCheck').checked;
+
+    if (!query || !city) {
+        alert('Entrez une requête et une ville.');
+        return;
+    }
+
+    // Reset
+    searching = true;
+    stopRequested = false;
+    results = [];
+    document.getElementById('resultsBody').innerHTML = '';
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('searchBtn').disabled = true;
+    document.getElementById('stopBtn').style.display = '';
+    updateCount();
+
+    try {
+        // 1. Géocoder
+        setStatus('📍 Géolocalisation...', 'active');
+        const location = await geocodeCity(city);
+
+        // 2. Rechercher
+        setStatus('🔍 Recherche en cours...', 'active');
+        const places = await searchPlaces(`${query} ${city}`, location, limit);
+
+        // 3. Ajouter les résultats
+        for (let i = 0; i < places.length; i++) {
+            if (stopRequested) break;
+            results.push(places[i]);
+            addRow(places[i]);
+            setStatus(`📋 ${results.length}/${places.length} fiches`, 'active');
+        }
+
+        // 4. Emails
+        if (wantEmail && !stopRequested) {
+            let emailsFound = 0;
+            for (let i = 0; i < results.length; i++) {
+                if (stopRequested) break;
+                if (!results[i].website) continue;
+
+                setStatus(`📧 Email ${i + 1}/${results.length} (${emailsFound} trouvés) — ${results[i].name}`, 'active');
+                // Afficher un spinner dans la cellule pendant la recherche
+                setEmailCellLoading(i, true);
+                const email = await fetchEmail(results[i].website);
+                if (email) {
+                    results[i].email = email;
+                    emailsFound++;
+                    updateRow(i);
+                } else {
+                    setEmailCellLoading(i, false);
+                }
+            }
+        }
+
+        setStatus(`✅ Terminé — ${results.length} résultat(s)`, 'done');
+
+    } catch (err) {
+        console.error(err);
+        setStatus(`❌ ${err.message}`, 'error');
+
+        if (err.message.includes('API_KEY') || err.message.includes('403')) {
+            alert('Erreur de clé API. Vérifiez que :\n\n1. La clé est correcte\n2. Les APIs "Places API (New)" et "Geocoding API" sont activées\n3. La facturation est activée sur le projet Google Cloud');
+        }
+    } finally {
+        searching = false;
+        document.getElementById('searchBtn').disabled = false;
+        document.getElementById('stopBtn').style.display = 'none';
+    }
+}
+
+function stopSearch() {
+    stopRequested = true;
+    setStatus('⛔ Arrêt...', 'error');
+}
+
+// ============================================================
+//  TABLE
+// ============================================================
+function addRow(info) {
+    const tbody = document.getElementById('resultsBody');
+    const tr = document.createElement('tr');
+    const n = results.length;
+
+    const websiteLink = info.website
+        ? `<a href="${escHtml(info.website)}" target="_blank" title="${escHtml(info.website)}">${truncate(info.website.replace(/^https?:\/\/(www\.)?/, ''), 30)}</a>`
+        : '';
+
+    const nameLink = info.link
+        ? `<a href="${escHtml(info.link)}" target="_blank">${escHtml(info.name)}</a>`
+        : escHtml(info.name);
+
+    tr.innerHTML = `
+        <td>${n}</td>
+        <td>${nameLink}</td>
+        <td title="${escHtml(info.address)}">${escHtml(truncate(info.address, 40))}</td>
+        <td>${escHtml(info.phone)}</td>
+        <td>${websiteLink}</td>
+        <td class="email-cell">${escHtml(info.email)}</td>
+        <td class="rating">${info.rating ? '⭐ ' + info.rating : ''}</td>
+        <td>${escHtml(info.reviews)}</td>
+    `;
+    tr.dataset.index = n - 1;
+    tbody.appendChild(tr);
+    updateCount();
+}
+
+function setEmailCellLoading(index, loading) {
+    const rows = document.getElementById('resultsBody').querySelectorAll('tr');
+    for (const row of rows) {
+        if (parseInt(row.dataset.index) === index) {
+            const emailCell = row.querySelector('.email-cell');
+            if (emailCell) {
+                if (loading) {
+                    emailCell.innerHTML = '<span class="email-spinner"></span>';
+                } else {
+                    emailCell.textContent = '—';
+                }
+            }
+            break;
+        }
+    }
+}
+
+function updateRow(index) {
+    const rows = document.getElementById('resultsBody').querySelectorAll('tr');
+    for (const row of rows) {
+        if (parseInt(row.dataset.index) === index) {
+            const emailCell = row.querySelector('.email-cell');
+            if (emailCell) {
+                emailCell.textContent = results[index].email;
+                emailCell.classList.add('email-found');
+            }
+            break;
+        }
+    }
+}
+
+function updateCount() {
+    document.getElementById('countBadge').textContent = results.length;
+    document.getElementById('emptyState').style.display = results.length > 0 ? 'none' : '';
+}
+
+// ============================================================
+//  CSV EXPORT
+// ============================================================
+function exportCSV() {
+    if (results.length === 0) {
+        alert('Aucune donnée à exporter.');
+        return;
+    }
+
+    const sep = ';';
+    const headers = ['N°', 'Nom', 'Adresse', 'Téléphone', 'Site Web', 'Email', 'Note', 'Avis', 'Lien Google Maps'];
+    const lines = [headers.join(sep)];
+
+    results.forEach((r, i) => {
+        lines.push([
+            i + 1,
+            csvEscape(r.name),
+            csvEscape(r.address),
+            csvEscape(r.phone),
+            csvEscape(r.website),
+            csvEscape(r.email),
+            r.rating,
+            r.reviews,
+            csvEscape(r.link),
+        ].join(sep));
+    });
+
+    const bom = '\uFEFF';
+    const blob = new Blob([bom + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `digiqolead_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function escHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function truncate(str, max) {
+    if (!str) return '';
+    return str.length > max ? str.slice(0, max) + '...' : str;
+}
+
+function csvEscape(str) {
+    if (!str) return '';
+    if (str.includes(';') || str.includes('"') || str.includes('\n')) {
+        return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Enter key triggers search
+document.getElementById('queryInput').addEventListener('keydown', e => { if (e.key === 'Enter') startSearch(); });
+document.getElementById('cityInput').addEventListener('keydown', e => { if (e.key === 'Enter') startSearch(); });
+</script>
+
+</body>
+</html>
