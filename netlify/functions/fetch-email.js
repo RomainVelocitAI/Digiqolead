@@ -1,36 +1,38 @@
-// Netlify Function : fetch-email
+// Netlify Function v1 (CommonJS) : fetch-email
 // Scrape un site web côté serveur (pas de CORS) et extrait les emails
 
-export default async function handler(req) {
-    const url = new URL(req.url, 'http://localhost');
-    const website = url.searchParams.get('url');
+exports.handler = async function(event, context) {
+    const website = event.queryStringParameters && event.queryStringParameters.url;
 
     if (!website) {
-        return new Response(JSON.stringify({ email: '', error: 'Missing url parameter' }), {
-            status: 400,
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-        });
+        return {
+            statusCode: 400,
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+            body: JSON.stringify({ email: '', error: 'Missing url parameter' })
+        };
     }
 
     try {
         const email = await scrapeEmail(website);
-        return new Response(JSON.stringify({ email }), {
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-        });
+        return {
+            statusCode: 200,
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+            body: JSON.stringify({ email })
+        };
     } catch (err) {
-        return new Response(JSON.stringify({ email: '', error: err.message }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-        });
+        return {
+            statusCode: 500,
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+            body: JSON.stringify({ email: '', error: err.message })
+        };
     }
-}
+};
 
 // ─── Scraping logic ───
 
 async function scrapeEmail(website) {
     const baseUrl = website.replace(/\/$/, '');
 
-    // Pages à scanner en priorité (les plus probables d'abord)
     const pagesToScan = [
         baseUrl,
         baseUrl + '/contact',
@@ -54,7 +56,7 @@ async function scrapeEmail(website) {
     ];
 
     const startTime = Date.now();
-    const MAX_TIME = 8500; // Garde-fou à 8.5s (timeout Netlify = 10s)
+    const MAX_TIME = 8500;
 
     for (const pageUrl of pagesToScan) {
         if (Date.now() - startTime > MAX_TIME) break;
@@ -79,7 +81,6 @@ async function scrapeEmail(website) {
             const email = findEmailInHtml(html);
             if (email) return email;
 
-            // Sur la homepage, découvrir des liens vers contact/legal
             if (pageUrl === baseUrl) {
                 const extraPages = findContactLinks(html, baseUrl);
                 for (const extraUrl of extraPages) {
@@ -100,10 +101,10 @@ async function scrapeEmail(website) {
                             const email2 = findEmailInHtml(html2);
                             if (email2) return email2;
                         }
-                    } catch {}
+                    } catch (e) { /* ignore */ }
                 }
             }
-        } catch {
+        } catch (e) {
             continue;
         }
     }
@@ -115,8 +116,8 @@ async function scrapeEmail(website) {
 
 function decodeHtmlEntities(text) {
     return text
-        .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
-        .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+        .replace(/&#(\d+);/g, function(_, code) { return String.fromCharCode(parseInt(code, 10)); })
+        .replace(/&#x([0-9a-fA-F]+);/g, function(_, code) { return String.fromCharCode(parseInt(code, 16)); })
         .replace(/&commat;/gi, '@')
         .replace(/&period;/gi, '.')
         .replace(/&hyphen;/gi, '-')
@@ -127,19 +128,19 @@ function decodeHtmlEntities(text) {
 }
 
 function decodeCloudflareEmail(html) {
-    const emails = [];
-    const cfRegex = /data-cfemail=["']([0-9a-fA-F]+)["']/gi;
-    let match;
+    var emails = [];
+    var cfRegex = /data-cfemail=["']([0-9a-fA-F]+)["']/gi;
+    var match;
     while ((match = cfRegex.exec(html)) !== null) {
         try {
-            const encoded = match[1];
-            const key = parseInt(encoded.substr(0, 2), 16);
-            let decoded = '';
-            for (let i = 2; i < encoded.length; i += 2) {
+            var encoded = match[1];
+            var key = parseInt(encoded.substr(0, 2), 16);
+            var decoded = '';
+            for (var i = 2; i < encoded.length; i += 2) {
                 decoded += String.fromCharCode(parseInt(encoded.substr(i, 2), 16) ^ key);
             }
             if (decoded.includes('@')) emails.push(decoded);
-        } catch {}
+        } catch (e) { /* ignore */ }
     }
     return emails;
 }
@@ -159,37 +160,45 @@ function deobfuscateEmails(text) {
 }
 
 function findEmailInHtml(html) {
-    let decoded = decodeHtmlEntities(html);
-    try { decoded = decodeURIComponent(decoded); } catch {}
+    var decoded = decodeHtmlEntities(html);
+    try { decoded = decodeURIComponent(decoded); } catch (e) { /* ignore */ }
 
-    const cfEmails = decodeCloudflareEmail(html);
-    const deobfuscated = deobfuscateEmails(decoded);
+    var cfEmails = decodeCloudflareEmail(html);
+    var deobfuscated = deobfuscateEmails(decoded);
 
-    const mailtoRegex = /mailto:([\w.\-+]+@[\w.\-]+\.\w{2,})/gi;
-    const mailtoMatches = [];
-    let m;
+    var mailtoRegex = /mailto:([\w.\-+]+@[\w.\-]+\.\w{2,})/gi;
+    var mailtoMatches = [];
+    var m;
     while ((m = mailtoRegex.exec(deobfuscated)) !== null) {
         mailtoMatches.push(m[1]);
     }
 
-    const textMatches = deobfuscated.match(/[\w.\-+]+@[\w.\-]+\.\w{2,}/gi) || [];
-    const allMatches = [...cfEmails, ...mailtoMatches, ...textMatches];
+    var textMatches = deobfuscated.match(/[\w.\-+]+@[\w.\-]+\.\w{2,}/gi) || [];
+    var allMatches = [].concat(cfEmails, mailtoMatches, textMatches);
 
-    const blacklist = ['example', 'wixpress', 'sentry', 'wordpress', 'gravatar', 'schema.org', 'w3.org',
-                       'googleapis', 'google.com', 'gstatic', 'cloudflare', 'jsdelivr', 'placeholder',
-                       'email@', 'name@', 'user@', 'info@example', 'test@', 'noreply', 'no-reply',
-                       'webpack', 'babel', 'polyfill', 'bootstrap', 'jquery', '.min.js', '.bundle.',
-                       'fbcdn', 'facebook', 'twitter', 'instagram'];
-    const validTlds = ['.com','.fr','.net','.org','.eu','.io','.co','.info','.de','.uk','.es','.it','.be','.ch','.ca','.re','.nl','.pt','.biz'];
+    var blacklist = ['example', 'wixpress', 'sentry', 'wordpress', 'gravatar', 'schema.org', 'w3.org',
+                     'googleapis', 'google.com', 'gstatic', 'cloudflare', 'jsdelivr', 'placeholder',
+                     'email@', 'name@', 'user@', 'info@example', 'test@', 'noreply', 'no-reply',
+                     'webpack', 'babel', 'polyfill', 'bootstrap', 'jquery', '.min.js', '.bundle.',
+                     'fbcdn', 'facebook', 'twitter', 'instagram'];
+    var validTlds = ['.com','.fr','.net','.org','.eu','.io','.co','.info','.de','.uk','.es','.it','.be','.ch','.ca','.re','.nl','.pt','.biz'];
 
-    const seen = new Set();
-    for (const email of allMatches) {
-        const lower = email.toLowerCase().trim();
-        if (seen.has(lower)) continue;
-        seen.add(lower);
+    var seen = {};
+    for (var i = 0; i < allMatches.length; i++) {
+        var lower = allMatches[i].toLowerCase().trim();
+        if (seen[lower]) continue;
+        seen[lower] = true;
         if (lower.length > 60 || lower.length < 6) continue;
-        if (blacklist.some(b => lower.includes(b))) continue;
-        if (!validTlds.some(t => lower.endsWith(t))) continue;
+        var blocked = false;
+        for (var j = 0; j < blacklist.length; j++) {
+            if (lower.includes(blacklist[j])) { blocked = true; break; }
+        }
+        if (blocked) continue;
+        var validTld = false;
+        for (var k = 0; k < validTlds.length; k++) {
+            if (lower.endsWith(validTlds[k])) { validTld = true; break; }
+        }
+        if (!validTld) continue;
         if (!/^[\w.\-+]+@[\w.\-]+\.\w{2,}$/.test(lower)) continue;
         return lower;
     }
@@ -197,23 +206,27 @@ function findEmailInHtml(html) {
 }
 
 function findContactLinks(html, baseUrl) {
-    const links = [];
-    const hrefRegex = /href=["']([^"']*?)["']/gi;
-    let match;
-    const keywords = ['contact', 'mention', 'legal', 'legale', 'propos', 'about', 'info', 'qui-sommes', 'equipe', 'impressum', 'imprint', 'footer', 'cgv', 'cgu', 'politique', 'privacy'];
+    var links = [];
+    var hrefRegex = /href=["']([^"']*?)["']/gi;
+    var match;
+    var keywords = ['contact', 'mention', 'legal', 'legale', 'propos', 'about', 'info', 'qui-sommes', 'equipe', 'impressum', 'imprint', 'footer', 'cgv', 'cgu', 'politique', 'privacy'];
 
     while ((match = hrefRegex.exec(html)) !== null) {
-        const href = match[1];
-        const lower = href.toLowerCase();
-        if (keywords.some(kw => lower.includes(kw))) {
-            let fullUrl = href;
+        var href = match[1];
+        var lower = href.toLowerCase();
+        var found = false;
+        for (var i = 0; i < keywords.length; i++) {
+            if (lower.includes(keywords[i])) { found = true; break; }
+        }
+        if (found) {
+            var fullUrl = href;
             if (href.startsWith('/')) {
                 fullUrl = baseUrl + href;
             } else if (!href.startsWith('http')) {
                 fullUrl = baseUrl + '/' + href;
             }
             if (fullUrl.startsWith('http') && !fullUrl.includes('mailto:') && !fullUrl.includes('tel:') && !fullUrl.includes('#')) {
-                if (!links.includes(fullUrl)) {
+                if (links.indexOf(fullUrl) === -1) {
                     links.push(fullUrl);
                 }
             }
@@ -221,7 +234,3 @@ function findContactLinks(html, baseUrl) {
     }
     return links.slice(0, 5);
 }
-
-export const config = {
-    path: "/.netlify/functions/fetch-email"
-};
